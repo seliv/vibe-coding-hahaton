@@ -13,8 +13,7 @@ Let’s create a privately deployable Skype-like chatting tool.
 
 1. User self-registration: a new user must be able to visit the application page and register.
    The user should Just enter username and password (twice) and they are registered.
-   No IDP or email verification is required. 
-
+   No IDP or email verification is required.
 2. The user has a list of contacts, sought and added by username.
    On add contact, the counterparty should accept the connection request.
    When the user adds a person to their address book, the action is mutual: the counterparty gets the requestor in their address book as well.

@@ -25,6 +25,9 @@ dependencies {
     // ActiveMQ
     implementation("org.springframework.boot:spring-boot-starter-activemq")
     implementation("org.apache.activemq:activemq-broker")
+    
+    // JMS API for Jakarta EE
+    implementation("jakarta.jms:jakarta.jms-api:3.1.0")
 
     // AWS S3
     implementation("software.amazon.awssdk:s3:2.20.56")

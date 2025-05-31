@@ -31,3 +31,7 @@ Let’s create a privately deployable Skype-like chatting tool.
 8. UI is the typical chat UI with chat list on the left and chat messages on the right.
 9. Users can send text messages with bold and italic font style.
 10. Users can post images (including posting to group chats) 
+
+## Detailed Specification
+
+- [Frontend specification](frontend.md)

@@ -1,7 +1,9 @@
 package com.vibe.server.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -9,8 +11,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -35,7 +40,20 @@ public class User {
     private String password;
 
     @ManyToMany
+    @JoinTable(
+        name = "user_contacts",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "contact_id")
+    )
     private Set<User> contacts = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "contact_requests",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "requester_id")
+    )
+    private Set<User> contactRequests = new HashSet<>();
 
     private LocalDateTime createdAt;
 
@@ -92,6 +110,26 @@ public class User {
 
     public void removeContact(User contact) {
         this.contacts.remove(contact);
+    }
+
+    public Set<User> getContactRequests() {
+        return contactRequests;
+    }
+
+    public void setContactRequests(Set<User> contactRequests) {
+        this.contactRequests = contactRequests;
+    }
+
+    public void addContactRequest(User requester) {
+        this.contactRequests.add(requester);
+    }
+
+    public void removeContactRequest(User requester) {
+        this.contactRequests.remove(requester);
+    }
+
+    public List<User> getContactRequestsList() {
+        return new ArrayList<>(contactRequests);
     }
 
     public LocalDateTime getCreatedAt() {

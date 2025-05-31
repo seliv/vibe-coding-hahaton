@@ -13,7 +13,7 @@ import com.vibe.server.repository.UserRepository;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+import com.vibe.server.security.JwtKeyProvider;
 
 /**
  * Service for authentication operations.
@@ -23,18 +23,17 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    
-    @Value("${jwt.secret}")
-    private String jwtSecret;
-    
+    private final JwtKeyProvider jwtKeyProvider;
+
     @Value("${jwt.expiration}")
     private long jwtExpiration;
-    
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtKeyProvider jwtKeyProvider) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtKeyProvider = jwtKeyProvider;
     }
-    
+
     /**
      * Register a new user.
      *
@@ -48,14 +47,14 @@ public class AuthService {
         if (userRepository.existsByUsername(username)) {
             throw new IllegalArgumentException("Username is already taken");
         }
-        
+
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
-        
+
         return userRepository.save(user);
     }
-    
+
     /**
      * Authenticate a user and generate a JWT token.
      *
@@ -67,14 +66,14 @@ public class AuthService {
     public String authenticate(String username, String password) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
-        
+
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("Invalid username or password");
         }
-        
+
         return generateToken(user);
     }
-    
+
     /**
      * Generate a JWT token for a user.
      *
@@ -84,12 +83,12 @@ public class AuthService {
     private String generateToken(User user) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpiration);
-        
+
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS512)
+                .signWith(jwtKeyProvider.getJwtKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
 }

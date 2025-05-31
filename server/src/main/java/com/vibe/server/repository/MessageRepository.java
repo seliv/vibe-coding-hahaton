@@ -18,7 +18,7 @@ import com.vibe.server.model.User;
  */
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    
+
     /**
      * Find all messages in a chat, ordered by sent time.
      *
@@ -27,7 +27,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
      * @return the page of messages
      */
     Page<Message> findByChatOrderBySentAtDesc(Chat chat, Pageable pageable);
-    
+
     /**
      * Find all undelivered messages for a user.
      *
@@ -37,7 +37,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     @Query("SELECT m FROM Message m JOIN m.chat c JOIN c.participants p " +
            "WHERE p = :user AND m.delivered = false AND m.sender != :user")
     List<Message> findUndeliveredMessagesForUser(@Param("user") User user);
-    
+
     /**
      * Find all messages containing the given text.
      *
@@ -47,6 +47,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
      * @return the page of messages
      */
     @Query("SELECT m FROM Message m JOIN m.chat c JOIN c.participants p " +
-           "WHERE p = :user AND LOWER(m.content) LIKE LOWER(CONCAT('%', :text, '%'))")
+           "WHERE p = :user AND lower(cast(m.content as string)) LIKE lower(concat('%', cast(:text as string), '%'))")
     Page<Message> searchMessages(@Param("text") String text, @Param("user") User user, Pageable pageable);
 }

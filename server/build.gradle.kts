@@ -24,6 +24,7 @@ dependencies {
 
     // ActiveMQ
     implementation("org.springframework.boot:spring-boot-starter-activemq")
+    implementation("org.apache.activemq:activemq-broker")
 
     // AWS S3
     implementation("software.amazon.awssdk:s3:2.20.56")

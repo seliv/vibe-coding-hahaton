@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: vibe-postgres
+    environment:
+      POSTGRES_DB: vibe
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: deploy/docker/backend.Dockerfile
+    container_name: vibe-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/vibe
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_PROFILES_ACTIVE: dev
+      LOCAL_STORAGE_PATH: /app/file-storage
+    ports:
+      - "8080:8080"
+    volumes:
+      - file-storage:/app/file-storage
+
+  frontend:
+    build:
+      context: .
+      dockerfile: deploy/docker/frontend.Dockerfile
+    container_name: vibe-frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    environment:
+      - API_URL=http://backend:8080/api
+
+volumes:
+  postgres-data:
+    name: vibe-postgres-data
+  file-storage:
+    name: vibe-file-storage

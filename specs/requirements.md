@@ -3,7 +3,7 @@
 ## Overview
 
 In May 2025 Skype was shutdown. There are many alternatives, but Skype was very good for team chatting. 
-Let’s create privately deployable Skype-like chatting tool.
+Let’s create a privately deployable Skype-like chatting tool.
 
 ## References
 - Solution technologies and infrastructure: environment.md

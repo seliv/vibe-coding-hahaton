@@ -5,8 +5,8 @@ WORKDIR /app
 # Copy package.json and package-lock.json
 COPY ui/package.json ui/package-lock.json ./
 
-# Install dependencies
-RUN npm ci
+# Install dependencies and update package-lock.json
+RUN npm install
 
 # Copy the rest of the application
 COPY ui/ ./
@@ -18,7 +18,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copy the build output to replace the default nginx contents
-COPY --from=build /app/dist/vibe-ui /usr/share/nginx/html
+COPY --from=build /app/dist/vibe-chat-ui /usr/share/nginx/html
 
 # Copy custom nginx configuration if needed
 # COPY deploy/docker/nginx.conf /etc/nginx/conf.d/default.conf

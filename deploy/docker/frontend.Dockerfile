@@ -20,8 +20,8 @@ FROM nginx:alpine
 # Copy the build output to replace the default nginx contents
 COPY --from=build /app/dist/vibe-chat-ui /usr/share/nginx/html
 
-# Copy custom nginx configuration if needed
-# COPY deploy/docker/nginx.conf /etc/nginx/conf.d/default.conf
+# Copy custom nginx configuration
+COPY deploy/docker/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 

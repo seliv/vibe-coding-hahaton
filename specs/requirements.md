@@ -5,6 +5,10 @@
 In May 2025 Skype was shutdown. There are many alternatives, but Skype was very good for team chatting. 
 Let’s create privately deployable Skype-like chatting tool.
 
+## References
+- Solution technologies and infrastructure: environment.md
+- Solution Architecture Decisions: architecture.md
+
 ## Core Functionality (User's Perspective)
 
 1. User self-registration: a new user must be able to visit the application page and register.

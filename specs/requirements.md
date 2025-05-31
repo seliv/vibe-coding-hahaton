@@ -6,6 +6,7 @@ In May 2025 Skype was shutdown. There are many alternatives, but Skype was very 
 Let’s create a privately deployable Skype-like chatting tool.
 
 ## References
+
 - Solution technologies and infrastructure: environment.md
 - Solution Architecture Decisions: architecture.md
 
